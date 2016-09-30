@@ -13,3 +13,10 @@ module XCode1
     # -- all .rb files in that directory are automatically loaded.
   end
 end
+
+config.middleware.insert_before 0, "Rack::Cors" do
+  allow do
+    origins '*'
+    resource '*', :headers => :any, :methods => [:get, :post, :options]
+  end
+end
