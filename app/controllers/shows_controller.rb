@@ -1,5 +1,7 @@
 class ShowsController < ApplicationController
-  before_action :set_show, only: [:show, :edit, :update, :destroy]
+  before_action :set_show, only: [:show, :edit, :update, :destroy, :book]
+
+  skip_before_action :verify_authenticity_token, only: [:book]
 
   # GET /shows
   # GET /shows.json
@@ -61,6 +63,22 @@ class ShowsController < ApplicationController
     end
   end
 
+  # POST /shows/1/book.json
+  def book
+    # On crée un nouvel objet booking à partir des paramètres reçus
+    @booking = Booking.new(booking_params)
+    # On précise que cet object Booking dépend du show concerné
+    @booking.show = @show
+
+    respond_to do |format|
+      if @booking.save
+        format.json
+      else
+        format.json { render json: @booking.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_show
@@ -70,5 +88,9 @@ class ShowsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def show_params
       params.require(:show).permit(:name, :venue, :description, :capacity, :price, :image, :date)
+    end
+
+    def booking_params
+      params.require(:booking).permit(:user_name, :seats)
     end
 end
