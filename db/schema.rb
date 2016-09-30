@@ -10,7 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160925143122) do
+ActiveRecord::Schema.define(version: 20160930120654) do
+
+  create_table "bookings", force: :cascade do |t|
+    t.string   "user_name"
+    t.integer  "seats"
+    t.integer  "show_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["show_id"], name: "index_bookings_on_show_id"
+  end
 
   create_table "shows", force: :cascade do |t|
     t.string   "name"
